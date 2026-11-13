@@ -170,8 +170,9 @@ def build_cover(project: Project, out: Path, page_count: int) -> dict:
             c.drawString(bx + safe, H - bleed * IN - safe - 16 - k * 22, line)
     if plat.get("barcode_zone"):
         zw, zh = (v * IN for v in plat["barcode_zone"])
+        gap = plat.get("barcode_margin", 0.25) * IN  # distancia al lomo y al corte inferior
         c.setFillColor(white)
-        c.rect(bx + tw * IN - zw - 0.25 * IN, (bleed + 0.25) * IN, zw, zh, fill=1, stroke=0)
+        c.rect(bx + tw * IN - zw - gap, bleed * IN + gap, zw, zh, fill=1, stroke=0)
 
     # Lomo: solo lleva texto si el libro es lo bastante grueso.
     spine_text = page_count >= plat["spine_text_min_pages"]
@@ -179,10 +180,12 @@ def build_cover(project: Project, out: Path, page_count: int) -> dict:
         c.saveState()
         c.translate((bleed + tw) * IN + spine * IN / 2, H / 2)
         c.rotate(-90)
-        size = min(12, spine * IN * 0.5)
+        # El texto deja libre el margen exigido a cada lado del lomo (0.0625 in en KDP).
+        margin = plat.get("spine_text_margin", 0.0625) * IN
+        size = min(12, (spine * IN - 2 * margin) / 0.75)
         c.setFillColor(ink)
         c.setFont(FONT_BOLD, size)
-        c.drawCentredString(0, -size / 3, d["title"])
+        c.drawCentredString(0, -size * 0.36, d["title"])
         c.restoreState()
     c.showPage()
     c.save()
