@@ -1,0 +1,18 @@
+{
+  "toddlers_2_4": {
+    "label": "Peques 2-4 años",
+    "style": "extra thick bold outlines, one single large subject filling most of the page, very simple rounded shapes, big open areas to color, almost no background detail"
+  },
+  "kids_4_8": {
+    "label": "Niños 4-8 años",
+    "style": "thick bold outlines, simple cute shapes, large areas to color, a simple background with only a few elements, friendly and cheerful"
+  },
+  "kids_8_12": {
+    "label": "Niños 8-12 años",
+    "style": "medium-weight clean outlines, moderate detail, a complete scene with background, some small patterns to color"
+  },
+  "adults": {
+    "label": "Adultos",
+    "style": "fine precise outlines, intricate detailed patterns, many small enclosed areas, elegant and balanced composition, stress-relief coloring style"
+  }
+}
