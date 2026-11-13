@@ -205,8 +205,10 @@ def cmd_build(a) -> None:
         if report["padding_blank_pages"] > 2:
             warnings.append(f"Hay {report['padding_blank_pages']} páginas en blanco al final para llegar al mínimo de "
                             f"{plat['min_pages']} de {plat['label']}: conviene añadir más ilustraciones")
-        if report["pages"] > plat["max_pages"]:
-            warnings.append(f"Supera el máximo de {plat['max_pages']} páginas de {plat['label']}")
+        max_pages = (plat.get("max_pages_by_trim", {}).get(d["trim"], {}).get(d.get("paper", "white"))
+                     or plat["max_pages"])
+        if report["pages"] > max_pages:
+            warnings.append(f"Supera el máximo de {max_pages} páginas de {plat['label']} para {d['trim']}")
         if d["cover"].get("file"):
             cover = project.abs(f"output/{slug}-cubierta.pdf")
             report["cover"] = {"file": str(cover), **pdf.build_cover(project, cover, report["pages"])}

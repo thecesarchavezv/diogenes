@@ -69,5 +69,8 @@ En otra plataforma de agentes, carga `SKILL.md` como instrucciones y expón `pyt
 
 - Probado de punta a punta en modo `--mock`: los tres modos, KDP y Lulu, tamaños y número de páginas de los PDF.
 - **No probado contra la API real de OpenAI** (no había clave en el entorno de construcción).
-- Las medidas de KDP siguen su guía pública. Las de IngramSpark, Lulu y B&N Press son aproximadas y
-  `build` lo avisa: confírmalas con la plantilla oficial de cada plataforma.
+- Medidas de imprenta revisadas en noviembre de 2026; el detalle de qué se confirmó está en el campo
+  `checked` de cada plataforma en [config/platforms.json](config/platforms.json).
+  - **KDP:** confirmado con sus páginas de ayuda.
+  - **Lulu:** confirmado salvo la tabla de medianil, que varía entre versiones de su guía.
+  - **IngramSpark y B&N Press:** no publican fórmula de lomo; `build` avisa de usar su plantilla oficial.
