@@ -1,0 +1,14 @@
+{
+  "style_lock": "kawaii, round eyes, soft rounded shapes, minimal background",
+  "pages": [
+    {"prompt": "a baby koala hugging a eucalyptus branch"},
+    {"prompt": "a smiling elephant spraying water with its trunk"},
+    {"prompt": "a penguin sliding on its belly across the ice"},
+    {"prompt": "a giraffe eating leaves from a tall tree"},
+    {"prompt": "a sea turtle swimming among three fish"}
+  ],
+  "cover": {
+    "prompt": "a koala, an elephant, a penguin, a giraffe and a sea turtle waving together",
+    "blurb": "Animales adorables para colorear. Formas sencillas y contornos gruesos para niños de 4 a 8 años."
+  }
+}

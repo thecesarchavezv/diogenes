@@ -1,0 +1,27 @@
+{
+  "name": "coloring-book-maker",
+  "description": "Crea dibujos para colorear, portadas a juego y PDF listos para imprimir o publicar. Los prompts y las imágenes de referencia del usuario se envían a la API de imágenes de OpenAI para generar las ilustraciones.",
+  "instructions": "SKILL.md",
+  "modes": ["standard", "publishing", "storybook"],
+  "models": {
+    "orchestrator": {"role": "conversación, guion y planificación", "model": "<el LLM de tu plataforma>"},
+    "image": {"role": "generación de ilustraciones", "provider": "openai", "model_env": "COLORBOOK_IMAGE_MODEL", "default": "gpt-image-1"}
+  },
+  "external_apis": [
+    {
+      "host": "api.openai.com",
+      "purpose": "generación de imágenes",
+      "data_sent": ["prompts de texto", "imágenes de referencia subidas por el usuario"],
+      "data_not_sent": ["historial de conversación", "archivos fuera de la carpeta del proyecto"]
+    }
+  ],
+  "credentials": [
+    {"env": "OPENAI_API_KEY", "owner": "developer", "user_input_required": false}
+  ],
+  "persistence": {
+    "background_execution": false,
+    "writes": "solo dentro de la carpeta del proyecto (projects/<libro>/)",
+    "account_actions": "ninguna: no sube ni publica en ninguna plataforma"
+  },
+  "tools": [{"name": "colorbook", "run": "python -m colorbook", "requires": ["python>=3.10", "requirements.txt"]}]
+}
