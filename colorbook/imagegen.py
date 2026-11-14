@@ -1,4 +1,8 @@
-"""Único punto de salida de datos: api.openai.com (API de imágenes).
+"""Único punto de salida de datos: el proveedor de imágenes.
+
+COLORBOOK_IMAGE_PROVIDER elige el proveedor:
+  openai     (por defecto) -> api.openai.com, con OPENAI_API_KEY
+  higgsfield -> CLI `higgsfield` ya autenticado (higgsfield auth login)
 
 Se envía: el prompt de texto y, si existen, las imágenes de referencia del usuario.
 No se envía nada más. Con mock=True no hay ninguna llamada de red.
@@ -10,6 +14,9 @@ import io
 import math
 import os
 import random
+import shlex
+import subprocess
+import urllib.request
 from pathlib import Path
 
 from PIL import Image, ImageDraw
@@ -31,6 +38,9 @@ def generate(prompt: str, size: str, refs: list[Path] | None = None, mock: bool 
              color: bool = False, seed: int = 0) -> Image.Image:
     if mock:
         return _mock(size, color, seed)
+    refs = [r for r in (refs or []) if Path(r).exists()]
+    if os.environ.get("COLORBOOK_IMAGE_PROVIDER", "openai") == "higgsfield":
+        return _higgsfield(prompt, size, refs)
     try:
         from openai import OpenAI
     except ImportError as e:  # pragma: no cover
@@ -41,7 +51,6 @@ def generate(prompt: str, size: str, refs: list[Path] | None = None, mock: bool 
     client = OpenAI()
     model = os.environ.get("COLORBOOK_IMAGE_MODEL", DEFAULT_MODEL)
     quality = os.environ.get("COLORBOOK_IMAGE_QUALITY", "medium")
-    refs = [r for r in (refs or []) if Path(r).exists()]
     if refs:
         files = [open(r, "rb") for r in refs]
         try:
@@ -52,6 +61,29 @@ def generate(prompt: str, size: str, refs: list[Path] | None = None, mock: bool 
     else:
         result = client.images.generate(model=model, prompt=prompt, size=size, quality=quality, n=1)
     return Image.open(io.BytesIO(base64.b64decode(result.data[0].b64_json))).convert("RGB")
+
+
+def _higgsfield(prompt: str, size: str, refs: list[Path]) -> Image.Image:
+    """Genera con el CLI de Higgsfield y descarga el resultado.
+
+    COLORBOOK_HF_MODEL  modelo (z_image funciona en el plan gratuito; gpt_image_2_6 exige plan de pago)
+    COLORBOOK_HF_PARAMS parámetros extra del modelo, p. ej. "--quality medium --resolution 2k"
+    """
+    model = os.environ.get("COLORBOOK_HF_MODEL", "z_image")
+    w, h = (int(v) for v in size.split("x"))
+    aspect = "3:4" if w < h else "4:3" if w > h else "1:1"
+    cmd = ["higgsfield", "generate", "create", model, "--prompt", prompt, "--aspect-ratio", aspect,
+           "--wait", "--wait-timeout", "8m", "--wait-interval", "10s"]
+    cmd += shlex.split(os.environ.get("COLORBOOK_HF_PARAMS", ""))
+    if refs and model != "z_image":  # z_image no admite imágenes de referencia
+        for r in refs:
+            cmd += ["--image-references", str(r)]
+    done = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
+    urls = [t for t in done.stdout.split() if t.startswith("https://")]
+    if done.returncode != 0 or not urls:
+        raise RuntimeError(f"Higgsfield no devolvió imagen: {(done.stderr or done.stdout).strip()[-300:]}")
+    with urllib.request.urlopen(urls[-1], timeout=120) as resp:
+        return Image.open(io.BytesIO(resp.read())).convert("RGB")
 
 
 def _mock(size: str, color: bool, seed: int) -> Image.Image:
