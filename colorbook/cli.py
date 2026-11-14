@@ -5,6 +5,8 @@
   python -m colorbook generate <dir> [--pages 1,2,3 | --pending] [--mock]
   python -m colorbook revise   <dir> --page 3 --note "líneas más gruesas" [--mock]
   python -m colorbook cover    <dir> [--note ...] [--mock]
+  python -m colorbook prompts  <dir>
+  python -m colorbook import   <dir> --page 3 --file dibujo.png   (o --cover)
   python -m colorbook status   <dir>
   python -m colorbook build    <dir>
 """
@@ -103,6 +105,12 @@ def _render_page(project: Project, page: dict, refs: list[Path], mock: bool) -> 
     except Exception as e:  # una página fallida no tumba el lote
         page["status"] = "failed"
         return {"n": page["n"], "status": "failed", "error": str(e)[:300]}
+    return _store_page(project, page, raw, version)
+
+
+def _store_page(project: Project, page: dict, raw: Image.Image, version: int) -> dict:
+    """Guarda el original, lo limpia a línea pura y pasa el control de calidad."""
+    tw, th = project.trim
     raw_rel = f"pages/raw/page_{page['n']:03d}_v{version}.png"
     rel = f"pages/page_{page['n']:03d}.png"
     raw.save(project.abs(raw_rel))
@@ -155,6 +163,26 @@ def cmd_style(a) -> None:
     out({"style_lock": a.set, "pending": sum(p["status"] == "pending" for p in project.pages)})
 
 
+def cmd_import(a) -> None:
+    """Incorpora una imagen hecha fuera (otro generador o un dibujo propio) como página o portada."""
+    project = Project(a.dir)
+    img = Image.open(a.file).convert("RGB")
+    if a.cover:
+        result = _store_cover(project, img)
+    else:
+        page = project.page(a.page)
+        result = _store_page(project, page, img, page["version"] + 1)
+    project.save()
+    out(result)
+
+
+def cmd_prompts(a) -> None:
+    """Muestra los prompts exactos, para generar las imágenes con otra herramienta."""
+    project = Project(a.dir)
+    out({"pages": [{"n": p["n"], "prompt": prompts.page_prompt(project, p)} for p in project.pages],
+         "cover": prompts.cover_prompt(project)})
+
+
 def cmd_cover(a) -> None:
     project = Project(a.dir)
     cover = project.data["cover"]
@@ -164,9 +192,18 @@ def cmd_cover(a) -> None:
         cover["blurb"] = a.blurb
     if a.note:
         cover.setdefault("notes", []).append(a.note)
-    version = cover.get("version", 0) + 1
     img = imagegen.generate(prompts.cover_prompt(project), imagegen.size_for(project.trim),
-                            _refs(project, a.mock), mock=a.mock, color=True, seed=version)
+                            _refs(project, a.mock), mock=a.mock, color=True,
+                            seed=cover.get("version", 0) + 1)
+    result = _store_cover(project, img)
+    project.save()
+    out({**result, "mock": a.mock})
+
+
+def _store_cover(project: Project, img: Image.Image) -> dict:
+    """Recorta la ilustración al panel de portada con su sangrado, a 300 ppp."""
+    cover = project.data["cover"]
+    version = cover.get("version", 0) + 1
     tw, th = project.trim
     bleed = project.platform["bleed"]
     px = (round((tw + bleed) * 300), round((th + 2 * bleed) * 300))
@@ -175,8 +212,7 @@ def cmd_cover(a) -> None:
     left, top = (img.width - px[0]) // 2, (img.height - px[1]) // 2
     img.crop((left, top, left + px[0], top + px[1])).save(project.abs("cover/front.png"))
     cover.update(file="cover/front.png", version=version)
-    project.save()
-    out({"cover": str(project.abs("cover/front.png")), "version": version, "mock": a.mock})
+    return {"cover": str(project.abs("cover/front.png")), "version": version}
 
 
 def cmd_status(a) -> None:
@@ -276,6 +312,18 @@ def main(argv=None) -> None:
     p.add_argument("--note")
     p.add_argument("--mock", action="store_true")
     p.set_defaults(fn=cmd_cover)
+
+    p = sub.add_parser("import")
+    p.add_argument("dir")
+    p.add_argument("--file", required=True)
+    g = p.add_mutually_exclusive_group(required=True)
+    g.add_argument("--page", type=int)
+    g.add_argument("--cover", action="store_true")
+    p.set_defaults(fn=cmd_import)
+
+    p = sub.add_parser("prompts")
+    p.add_argument("dir")
+    p.set_defaults(fn=cmd_prompts)
 
     p = sub.add_parser("status")
     p.add_argument("dir")

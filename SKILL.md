@@ -38,6 +38,8 @@ devuelve JSON.
 | `revise --page N --note "..."` | Rehacer una página con una corrección |
 | `style --set "..." [--redo]` | Fijar o cambiar el estilo del libro |
 | `cover [--prompt] [--blurb] [--note]` | Portada a color a juego |
+| `prompts` | Ver los prompts exactos, para generar las imágenes con otra herramienta |
+| `import --page N --file img.png` (o `--cover`) | Incorporar una imagen hecha fuera; pasa la misma limpieza y control de calidad |
 | `status` | Qué falta y qué páginas tienen avisos de calidad |
 | `build` | PDF interior y, en imprenta, PDF de cubierta con lomo |
 

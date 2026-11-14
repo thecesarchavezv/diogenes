@@ -4,11 +4,12 @@ from __future__ import annotations
 from .project import Project, load_config
 
 LINE_ART_RULES = (
+    "Flat digital vector line art, not a photo or scan of paper. "
     "Black and white coloring book page. Clean black outlines on a pure white background. "
     "Line art only: no color, no gray, no shading, no gradients, no hatching, no solid black fills. "
     "Every shape is closed so it can be colored in. "
-    "The whole subject sits inside the frame with an empty white margin on all four sides. "
-    "No border, no frame, no watermark, no signature."
+    "The whole subject sits inside the image with an empty white margin on all four sides. "
+    "No rectangular border, no frame or box around the drawing, no watermark, no signature."
 )
 NO_TEXT = "No text, no letters, no numbers anywhere in the image."
 
@@ -58,7 +59,8 @@ def cover_prompt(project: Project) -> str:
         "Bold black outlines in the same line-art style as the interior pages, filled with bright flat colors.",
         f"Scene: {scene}.",
         "Leave the top third of the image calm and uncluttered so a title can be placed there.",
-        "No text, no letters, no logos.",
+        "Each animal or character appears exactly once, clearly separated from the others.",
+        "No text, no letters, no logos, no border or frame.",
     ]
     if d.get("style_lock"):
         parts.append(f"Style: {d['style_lock']}.")
