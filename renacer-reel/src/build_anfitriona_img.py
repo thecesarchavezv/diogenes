@@ -264,7 +264,7 @@ FLASH.extend([19.0, 21.5])
 
 # ================= 24-30 events carousel
 photo("kiosco-escalera.jpg", 24.0, 6.0, 1, (1.15, 1.3, 0, 0, 0, 0), "50% 55%", 0.5)
-bubble(24.2, 5.6, "celebra aquí lo que vuelve a empezar")
+bubble(24.2, 5.6, "ven a celebrar tus eventos", "como en casa, entre los árboles")
 events = ["bodas", "xv años", "bautizos", "convivios"]
 for k, ev in enumerate(events):
     t = 24.6 + k * 1.2

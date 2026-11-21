@@ -71,7 +71,7 @@ def flash(t, strength=0.75, dur=0.35):
 els.append('<div id="bg" class="clip full" data-start="0" data-duration="30" data-track-index="0"></div>')
 
 # ================================================================== 0-4 INTRO
-# Leaf grows like a sprout, text "algo volvió a nacer" pops letter by letter.
+# Leaf grows like a sprout, text "siéntete en casa" pops letter by letter.
 LEAF = (
     '<svg viewBox="0 0 54 74" class="leafsvg">'
     '<path d="M27 5 Q33 5,36 10 Q42 13,40 19 Q44 24,40 30 Q44 36,39 42 Q38 50,30 56 Q28 58,27 58 '
@@ -97,9 +97,9 @@ js.append('tl.to("#leaf-in",{rotation:8,duration:0.5,ease:"sine.inOut",yoyo:true
 
 els.append(
     f'<div id="intro-t1" class="clip textblock mid" data-start="0.7" data-duration="3.3" data-track-index="6">'
-    f'<div class="big thin">{letters("algo volvió")}</div><div class="big thin">{letters("a nacer")}</div>'
+    f'<div class="big thin">{letters("siéntete")}</div><div class="big thin">{letters("en casa")}</div>'
     f'<div class="rule" id="intro-rule"></div>'
-    f'<div class="kicker" id="intro-k">entre los encinos</div></div>'
+    f'<div class="kicker" id="intro-k">entre los árboles</div></div>'
 )
 js.append('tl.from("#intro-t1 .l",{yPercent:120,opacity:0,rotation:12,duration:0.5,ease:"back.out(2)",stagger:0.045},0.75);')
 js.append('tl.fromTo("#intro-rule",{scaleX:0},{scaleX:1,duration:0.6,ease:"power3.out"},1.9);')
@@ -123,12 +123,12 @@ for k, (img, word, pos) in enumerate(build1):
     flash(t, 0.55, 0.25)
 
 build2 = [
-    ("panoramica-noche.jpg", "una", "40% 50%"),
-    ("parrilla-barra.jpg", "historia", "45% 50%"),
-    ("arco-columnas.jpg", "que", "50% 50%"),
-    ("pista-led.jpg", "vuelve", "50% 50%"),
-    ("carne-asada.jpg", "a", "50% 40%"),
-    ("encino-terraza.jpg", "empezar", "45% 50%"),
+    ("panoramica-noche.jpg", "ven", "40% 50%"),
+    ("parrilla-barra.jpg", "a", "45% 50%"),
+    ("arco-columnas.jpg", "celebrar", "50% 50%"),
+    ("pista-led.jpg", "como", "50% 50%"),
+    ("carne-asada.jpg", "en", "50% 40%"),
+    ("encino-terraza.jpg", "casa", "45% 50%"),
 ]
 for k, (img, word, pos) in enumerate(build2):
     t = 6.0 + k * 0.25
