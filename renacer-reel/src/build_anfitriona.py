@@ -142,7 +142,7 @@ def hop(t):
 
 def bubble(start, dur, text, sub=None, side="right"):
     i = nid("bb")
-    subhtml = f'<div class="bsub">{html.escape(sub)}</div>' if sub else ""
+    subhtml = "".join(f'<div class="bsub">{html.escape(x)}</div>' for x in sub.split("|")) if sub else ""
     els.append(
         f'<div id="{i}" class="clip bubblewrap" data-start="{start:.3f}" data-duration="{dur:.3f}" data-track-index="{6 + (uid[0] % 2)}">'
         f'<div class="bubble" id="{i}b"><div class="btext">{words(text)}</div>{subhtml}<div class="tail"></div></div></div>'
@@ -230,7 +230,7 @@ js.append('tl.fromTo("#outro-bg",{opacity:0},{opacity:1,duration:0.35},30.0);')
 els.append('<div id="seal" class="clip logo top" data-start="30" data-duration="6" data-track-index="4"><img id="seal-i" src="assets/img/sello-dorado.png" alt=""></div>')
 js.append('tl.fromTo("#seal-i",{scale:0.3,rotation:-120,opacity:0},{scale:1,rotation:0,opacity:1,duration:0.7,ease:"back.out(1.5)"},30.1);')
 js.append('tl.to("#seal-i",{rotation:10,duration:5,ease:"sine.inOut"},30.8);')
-bubble(30.6, 5.4, "¿qué estás celebrando?", "escríbenos por whatsapp · monterrey, n.l.")
+bubble(30.6, 5.4, "¿qué estás celebrando?", "escríbenos por whatsapp|san josé el vidrio, edo. de méxico")
 wave(31.0, 2.6)
 hop(34.0)
 FLASH.append(30.0)
@@ -272,7 +272,7 @@ html,body{margin:0;background:#1A2214}
 .bubble{position:absolute;left:400px;top:820px;width:600px;box-sizing:border-box;padding:40px 46px 42px;background:#F0EBE0;color:#1A2214;border-radius:44px;transform-origin:8% 100%;box-shadow:0 18px 50px rgba(0,0,0,.35);display:block}
 .btext{font-size:58px;font-weight:400;line-height:1.14}
 .wd{display:inline-block}
-.bsub{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;font-size:42px;color:#5A4818;margin-top:14px;line-height:1.1}
+.bsub{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;font-size:42px;color:#5A4818;margin-top:10px;white-space:nowrap;line-height:1.1}
 .tail{position:absolute;left:-26px;bottom:44px;width:0;height:0;border-top:22px solid transparent;border-bottom:22px solid transparent;border-right:44px solid #F0EBE0}
 .chipwrap{position:absolute;inset:0;width:1080px;height:1920px}
 .chip{position:absolute;left:0;top:250px;padding:20px 40px 16px 60px;background:#1A2214;border:3px solid #C4B480;border-left:none;border-radius:0 60px 60px 0;display:flex;gap:22px;align-items:baseline}

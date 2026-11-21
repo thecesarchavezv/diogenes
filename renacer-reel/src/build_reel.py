@@ -236,7 +236,7 @@ els.append(
     '<div class="q" id="outro-q">¿qué estás celebrando?</div>'
     '<div class="rule wide" id="outro-rule"></div>'
     '<div class="caps sm" id="outro-cta">ESCRÍBENOS POR WHATSAPP</div>'
-    '<div class="place" id="outro-place">jardín familiar entre encinos · monterrey, n.l.</div></div>'
+    '<div class="place" id="outro-place">jardín familiar entre encinos</div><div class="place sm2" id="outro-place2">san josé el vidrio · estado de méxico</div></div>'
 )
 js.append('tl.fromTo("#outro-seal",{scale:0.3,rotation:-120,opacity:0},{scale:1,rotation:0,opacity:1,duration:0.7,ease:"back.out(1.5)"},28.0);')
 js.append('tl.to("#outro-seal",{rotation:6,duration:1.3,ease:"sine.inOut"},28.7);')
@@ -244,6 +244,7 @@ js.append('tl.from("#outro-q",{y:40,opacity:0,duration:0.5,ease:"power3.out"},28
 js.append('tl.fromTo("#outro-rule",{scaleX:0},{scaleX:1,duration:0.5,ease:"power3.out"},28.6);')
 js.append('tl.from("#outro-cta",{opacity:0,scaleX:0.6,duration:0.6,ease:"power3.out"},28.7);')
 js.append('tl.from("#outro-place",{opacity:0,y:20,duration:0.5,ease:"power3.out"},28.9);')
+js.append('tl.from("#outro-place2",{opacity:0,y:20,duration:0.5,ease:"power3.out"},29.05);')
 flash(28.0, 0.8, 0.4)
 
 # ------------------------------------------------------------------ flash layer + audio
@@ -304,6 +305,7 @@ html,body{margin:0;padding:0;background:#1A2214}
 .outro-bg{background:radial-gradient(ellipse at 50% 42%,#27321e 0%,#1A2214 65%,#0f150b 100%)}
 #outro-seal{width:640px;height:640px;display:block;border-radius:50%}
 .q{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;font-size:88px;color:var(--crema);margin-top:56px;line-height:1.1}
+.sm2{margin-top:8px}
 .place{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:44px;color:var(--paja);margin-top:30px}
 .sweep{position:absolute;top:0;left:0;width:340px;height:1920px;background:linear-gradient(90deg,rgba(196,180,128,0) 0%,rgba(196,180,128,.38) 50%,rgba(196,180,128,0) 100%);transform:skewX(-14deg);display:block}
 """
