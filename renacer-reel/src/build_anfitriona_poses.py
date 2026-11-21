@@ -92,13 +92,13 @@ POSES = {  # name: (display height px, bottom y, center x)
     "u03-brazos-arriba": (1075, 1885, 245), "u05-caminando": (1000, 1885, 245),
     "u06-pensativa": (1035, 1885, 245), "u07-carcajada": (990, 1885, 245),
     "u09-sorpresa-mano": (1010, 1885, 245), "u10-camina-saluda": (1010, 1885, 245),
-    "v01-binoculares": (910, 1930, 250), "v02-audifonos": (1000, 1885, 245),
+    "v04-sentada-cruzada": (780, 1890, 265), "v02-audifonos": (1000, 1885, 245),
     "v03-selfie": (910, 1930, 285), "v05-senala-sorpresa": (950, 1885, 245),
     "v06-manos-abiertas": (1000, 1885, 260), "v08-camina-senala": (1000, 1885, 245),
     "v10-camina-saluda": (1010, 1885, 245),
 }
 ASPECT = {"u03-brazos-arriba": 501, "u05-caminando": 425, "u06-pensativa": 367, "u07-carcajada": 468,
-          "u09-sorpresa-mano": 479, "u10-camina-saluda": 456, "v01-binoculares": 537, "v02-audifonos": 399,
+          "u09-sorpresa-mano": 479, "u10-camina-saluda": 456, "v04-sentada-cruzada": 767, "v02-audifonos": 399,
           "v03-selfie": 529, "v05-senala-sorpresa": 433, "v06-manos-abiertas": 569, "v08-camina-senala": 483,
           "v10-camina-saluda": 469}
 imgs = []
@@ -192,8 +192,8 @@ full_image("assets/img/escalera-luces.jpg", 24.5, 2.0, 2, (1.2, 1.2, 160, -160, 
 chip(22.5, 4.0, "04", "los rincones")
 pose(22.5, "v06-manos-abiertas")
 bubble(22.8, 3.6, "espacios con historia y luz cálida", "como llegar a casa")
-pose(24.5, "v01-binoculares")
-lean(24.5, 2.0, 3)
+pose(24.5, "v04-sentada-cruzada")
+lean(24.5, 2.0, 2)
 FLASH.extend([(22.5, 0.45), (24.5, 0.35)])
 
 # E · events
